@@ -1,1 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marriage Journal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="container">
+    <h1>Marriage Journal</h1>
+    <p class="tagline">Daily reflections for a stronger “us”.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Today’s Entry</h2>
+      <form id="entryForm">
+        <label class="row">
+          <span>Date</span>
+          <input type="date" id="date" required />
+        </label>
+
+        <fieldset class="row">
+          <legend>Mood</legend>
+          <div class="moods">
+            <label><input type="radio" name="mood" value="😊" required /> 😊</label>
+            <label><input type="radio" name="mood" value="😐" /> 😐</label>
+            <label><input type="radio" name="mood" value="😞" /> 😞</label>
+          </div>
+        </fieldset>
+
+        <label class="row">
+          <span>Gratitude</span>
+          <textarea id="gratitude" rows="3"></textarea>
+        </label>
+
+        <label class="row">
+          <span>Our Win Today</span>
+          <textarea id="win" rows="3"></textarea>
+        </label>
+
+        <label class="row">
+          <span>One Act for Tomorrow</span>
+          <textarea id="act" rows="2"></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit">Save Entry</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Past Entries</h2>
+      <div id="emptyState" class="muted">No entries yet.</div>
+      <ul id="entriesList" class="list"></ul>
+    </section>
+  </main>
+
+  <footer class="container muted">
+    <small>Entries saved locally in your browser (private to you).</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
 
