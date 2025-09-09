@@ -1,72 +1,124 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>It’s a Beautiful Mess — Marriage Journal</title>
+  <title>Marriage Journal · It's a Beautiful Mess</title>
 
-  <!-- Brand fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Load your CSS LAST. IMPORTANT: no leading slash -->
-  <link rel="stylesheet" href="styles.css">        <!-- if styles.css lives next to index.html -->
-  <!-- or, if it’s inside a css folder: -->
-  <!-- <link rel="stylesheet" href="css/styles.css"> -->
-
-  <!-- Optional favicon (no leading slash) -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <meta name="theme-color" content="#000000">
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
-
-
-  
 <body>
+  <div class="site-bg" aria-hidden="true"></div>
 
-  <!-- Top Nav -->
-  <header class="navbar">
-    <div class="container">
-      <strong>It’s a Beautiful Mess</strong>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-name">It’s a Beautiful Mess</span>
+        <span class="brand-sub">Marriage Journal</span>
+      </div>
+
+      <nav class="top-links">
+        <a class="link" href="#journal">Journal</a>
+        <a class="link" href="#history">History</a>
+        <a class="link" href="#guidance">Guidance</a>
+      </nav>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="container hero" style="margin-top:24px;">
-    <span class="section-title">Marriage Journal</span>
-    <h1>Bring your heart. We’ll bring Scripture and a gentle next step.</h1>
+  <main class="container page">
+    <!-- Intro / hero -->
+    <section class="card hero">
+      <h1 class="hero-title">Bring your heart. We’ll bring Scripture and gentle coaching.</h1>
+      <p class="muted">Capture moments each day. Get biblically-grounded encouragement and a tiny next step you can actually take.</p>
+    </section>
 
-    <div class="card guidance" style="margin-top:18px;">
-      <h3>Today’s Entry</h3>
-      <p>What’s on your heart?</p>
-
-      <div style="display:flex; gap:12px; flex-wrap:wrap; margin:12px 0 6px;">
-        <a class="btn btn-primary" href="/journal/new">Start Entry</a>
-        <a class="btn btn-outline" href="/journal/history">View History</a>
-        <a class="btn btn-outline" href="/journal/guidance">Gentle Guidance</a>
-      </div>
-    </div>
-
-    <section style="margin-top:28px;">
-      <h2 class="headline">Recent</h2>
+    <!-- Journal form -->
+    <section id="journal" class="grid-2">
       <div class="card">
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Mood</th><th>Preview</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Sep 9</td><td>hopeful</td><td>Trusting God in a busy week…</td></tr>
-            <tr><td>Sep 8</td><td>grateful</td><td>Praise report from small group…</td></tr>
-          </tbody>
-        </table>
+        <h2 class="card-title">Today’s Entry</h2>
+
+        <label class="label" for="entryText">What’s on your heart?</label>
+        <textarea id="entryText" class="input" rows="6" placeholder="Be honest and specific. (This stays on your device.)"></textarea>
+
+        <div class="field">
+          <div class="label-row">
+            <label class="label">How do you feel?</label>
+            <span class="hint">Tap one</span>
+          </div>
+          <div id="moodChips" class="chips" role="group" aria-label="Mood">
+            <!-- chips are added by app.js OR you can seed some common ones -->
+            <button type="button" class="chip" data-value="grateful">Grateful</button>
+            <button type="button" class="chip" data-value="hopeful">Hopeful</button>
+            <button type="button" class="chip" data-value="okay">Okay</button>
+            <button type="button" class="chip" data-value="sad">Sad</button>
+            <button type="button" class="chip" data-value="frustrated">Frustrated</button>
+            <button type="button" class="chip" data-value="angry">Angry</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="gratitude">One thing I’m grateful for</label>
+          <input id="gratitude" class="input" type="text" placeholder="E.g., We prayed together tonight" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="action">One small step for tomorrow</label>
+          <input id="action" class="input" type="text" placeholder="E.g., Ask how I can serve my spouse" />
+        </div>
+
+        <button id="submitBtn" class="btn btn-primary">Save entry &amp; get guidance</button>
+
+        <p id="saveNote" class="save-note" aria-live="polite"></p>
       </div>
+
+      <!-- Guidance panel -->
+      <aside id="guidance" class="card accent">
+        <h2 class="card-title">Scripture &amp; Coaching</h2>
+        <div class="verse-block">
+          <div class="verse-label">Verse</div>
+          <blockquote id="verseText" class="verse">Your verse will appear here after you save an entry.</blockquote>
+        </div>
+
+        <div class="coach-block">
+          <div class="coach-label">Gentle guidance</div>
+          <p id="coachText" class="coach">Thoughtful reflection will appear here.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- History -->
+    <section id="history" class="card">
+      <h2 class="card-title">Recent Entries</h2>
+      <ul id="entriesList" class="entries"></ul>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="container footer" style="margin:40px 0;">
-    <p>© It’s a Beautiful Mess · <a href="/about">About</a></p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="brand tiny">
+          <span class="brand-mark" aria-hidden="true">✶</span>
+          <span class="brand-name">It’s a Beautiful Mess</span>
+        </div>
+        <p class="muted sm">
+          Stay grounded: pray together · read Scripture daily · weekly ESPM check-ins · communicate regularly · keep Christ at the center.
+        </p>
+      </div>
+
+      <div class="footer-right">
+        <a id="podcastLink" class="btn btn-ghost" target="_blank" rel="noopener"
+           href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww">
+          Listen on Spotify
+        </a>
+      </div>
+    </div>
   </footer>
 
+  <script src="app.js?v=2"></script>
 </body>
 </html>
