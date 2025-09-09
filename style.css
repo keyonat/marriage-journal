@@ -201,3 +201,78 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, input:focus-visible,
   .section{ box-shadow:none; border-color:#ddd }
   #toast{ display:none !important }
 }
+/* === STEP 1: layout + card structure (safe, no brand colors) === */
+:root{
+  --card-bg: rgba(255,255,255,0.92);
+  --card-radius: 16px;
+  --card-shadow: 0 6px 24px rgba(0,0,0,.06);
+  --gap: 24px;
+}
+
+/* main layout: two columns on desktop, single on mobile */
+main, .content, .page {
+  /* whichever wrapper you have—this is broad on purpose */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap);
+}
+@media (min-width: 900px){
+  main, .content, .page {
+    grid-template-columns: 2fr 1.2fr; /* left: journal, right: guidance */
+    align-items: start;
+  }
+}
+
+/* turn common sections into soft cards (no color changes yet) */
+section, article, aside, .panel, .card, .box {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px 22px;
+}
+
+/* make headings breathe a little */
+h2, h3 { margin: 0 0 12px 0; }
+
+/* buttons: ensure visible against any background */
+button, .btn, [type="submit"] {
+  background: #111;             /* visible, neutral */
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: .75rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+button:hover, .btn:hover { filter: brightness(1.05); }
+
+/* chip-like pills (for your mood choices) */
+.chips, .moods { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip, .pill {
+  background: #f0f0f0;
+  border-radius: 999px;
+  padding: .35rem .75rem;
+  font-size: .9rem;
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+/* textareas look tidy inside cards */
+textarea, input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.12);
+  padding: .75rem .9rem;
+  background: #fff;
+  min-height: 120px;
+}
+
+/* lists in guidance / history */
+ul { margin: .25rem 0 0 1.1rem; }
