@@ -1,0 +1,35 @@
+{
+  "anger": [
+    {"book": "James", "chapter": 1, "verses": "19-20", "text": "Let every person be quick to hear, slow to speak, slow to anger; for the anger of man does not produce the righteousness of God."},
+    {"book": "Ephesians", "chapter": 4, "verses": "26-27", "text": "Be angry and do not sin; do not let the sun go down on your anger, and give no opportunity to the devil."}
+  ],
+  "unforgiveness": [
+    {"book": "Ephesians", "chapter": 4, "verses": "31-32", "text": "Be kind to one another, tenderhearted, forgiving one another, as God in Christ forgave you."}
+  ],
+  "distance|disconnected|drift": [
+    {"book": "Ecclesiastes", "chapter": 4, "verses": "9-12", "text": "Two are better than one... a cord of three strands is not quickly broken."}
+  ],
+  "fear|anxious|worry": [
+    {"book": "Philippians", "chapter": 4, "verses": "6-7", "text": "Do not be anxious about anything... and the peace of God... will guard your hearts and your minds in Christ Jesus."},
+    {"book": "1 Peter", "chapter": 5, "verses": "7", "text": "Cast all your anxieties on him, because he cares for you."}
+  ],
+  "hopeless|giving up|divorce": [
+    {"book": "Matthew", "chapter": 19, "verses": "6", "text": "What therefore God has joined together, let not man separate."},
+    {"book": "Romans", "chapter": 12, "verses": "12", "text": "Rejoice in hope, be patient in tribulation, be constant in prayer."}
+  ],
+  "communication|listen|listening": [
+    {"book": "Proverbs", "chapter": 18, "verses": "13", "text": "If one gives an answer before he hears, it is his folly and shame."},
+    {"book": "James", "chapter": 1, "verses": "19", "text": "Let every person be quick to hear, slow to speak, slow to anger."}
+  ],
+  "love|kindness|compassion": [
+    {"book": "1 Corinthians", "chapter": 13, "verses": "4-7", "text": "Love is patient and kind; love does not envy or boast; it is not arrogant or rude..."},
+    {"book": "Colossians", "chapter": 3, "verses": "12-14", "text": "Put on... compassionate hearts, kindness, humility, meekness, and patience... and above all these put on love."}
+  ],
+  "trust|betrayal|hurt": [
+    {"book": "Psalm", "chapter": 147, "verses": "3", "text": "He heals the brokenhearted and binds up their wounds."},
+    {"book": "Proverbs", "chapter": 3, "verses": "5-6", "text": "Trust in the Lord with all your heart... and he will make straight your paths."}
+  ],
+  "gratitude|thankful": [
+    {"book": "1 Thessalonians", "chapter": 5, "verses": "16-18", "text": "Rejoice always, pray without ceasing, give thanks in all circumstances; for this is the will of God in Christ Jesus for you."}
+  ]
+}
