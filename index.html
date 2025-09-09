@@ -3,90 +3,106 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>It’s a Beautiful Mess — Marriage Journal</title>
+  <title>It’s a Beautiful Mess · Marriage Journal</title>
+  <meta name="description" content="Gentle, Scripture-guided reflections for couples. Save entries privately and receive coaching rooted in God’s Word." />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Optional minimal styles for the new classes used by app.js */
-    .chip{display:inline-flex;gap:.35rem;align-items:center;padding:.45rem .7rem;border-radius:999px;border:1px solid rgba(0,0,0,.08);cursor:pointer;user-select:none}
-    .chip[aria-pressed="true"]{border-color:rgba(0,0,0,.18);box-shadow:0 0 0 2px rgba(0,0,0,.04) inset}
-    .section{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:16px}
-    .muted{opacity:.7;font-style:italic}
-    #historyList .item{padding:10px 0;border-bottom:1px dashed rgba(0,0,0,.07)}
-    #historyList .meta{font-size:.85rem;opacity:.7}
-    #historyList .excerpt{margin-top:6px}
-    #guidanceBox h3{margin:.85rem 0 .35rem}
-    #guidanceBox .scripture{margin:.6rem 0;padding:.6rem .8rem;border-left:4px solid #b48c3c;background:#fff7e6;border-radius:8px}
-    #guidanceBox .alert{background:#fff2f2;border:1px solid #ffd6d6;border-radius:10px;padding:.65rem .8rem;margin:.6rem 0}
-    #toast{display:none;position:fixed;right:16px;bottom:16px;background:#222;color:#fff;padding:.6rem .8rem;border-radius:10px;opacity:.95}
-    .grid{display:grid;gap:16px}
-    @media(min-width:900px){ .layout{display:grid;grid-template-columns:1.15fr .85fr;gap:24px} }
-    button.primary{background:#4a3fb0;color:#fff;border:none;border-radius:12px;padding:.8rem 1.1rem;font-weight:600;cursor:pointer}
-    button.primary:disabled{opacity:.5;cursor:not-allowed}
-    .field label{display:block;font-weight:600;margin-bottom:.35rem}
-    .field textarea,.field input{width:100%;padding:.75rem;border-radius:12px;border:1px solid rgba(0,0,0,.1);background:#fff}
-  </style>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Ctext y='32' font-size='32'%3E✶%3C/text%3E%3C/svg%3E">
 </head>
 <body>
-  <header class="grid" style="gap:8px;margin:auto;max-width:1100px;padding:24px 16px 8px">
-    <div>
-      <h1 style="margin:0;">Marriage Journal</h1>
-      <div class="muted">Gentle, Scripture-guided reflections for couples</div>
+
+  <!-- Header / Brand -->
+  <header>
+    <div class="page-shell">
+      <div class="header" style="background:linear-gradient(180deg,#FFF, #FFF8EF); border:1px solid rgba(0,0,0,.04); border-radius:14px;">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            <div style="font-weight:900; letter-spacing:.2px;">It’s a Beautiful Mess</div>
+            <small>Marriage Journal</small>
+          </div>
+        </div>
+        <nav class="tabs" aria-label="Sections">
+          <button class="tab" aria-selected="true" onclick="document.getElementById('today').scrollIntoView({behavior:'smooth'});">Journal</button>
+          <button class="tab" aria-selected="false" onclick="document.getElementById('guidanceBox').scrollIntoView({behavior:'smooth'});">Guidance</button>
+          <button class="tab" aria-selected="false" onclick="document.getElementById('historyList').scrollIntoView({behavior:'smooth'});">History</button>
+        </nav>
+      </div>
+      <h1 class="title" style="margin-top:12px;">Bring your heart. We’ll bring Scripture and a gentle next step.</h1>
+      <p class="muted sm" style="margin-top:-4px;">Entries are saved privately on this device.</p>
     </div>
   </header>
 
-  <main class="layout" style="margin:auto;max-width:1100px;padding:8px 16px 40px">
-    <!-- Left: Today’s entry -->
-    <section class="section">
-      <h2 style="margin-top:0">Today’s Entry</h2>
+  <!-- Main layout -->
+  <main class="page-shell">
+    <div class="layout" id="today">
+      <!-- Left: Today’s Entry card -->
+      <section class="section" aria-labelledby="entry-title">
+        <h2 id="entry-title">Today’s Entry</h2>
 
-      <!-- Mood chips -->
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-        <button class="chip" type="button" aria-pressed="false">joy</button>
-        <button class="chip" type="button" aria-pressed="false">grateful</button>
-        <button class="chip" type="button" aria-pressed="false">hopeful</button>
-        <button class="chip" type="button" aria-pressed="false">confused</button>
-        <button class="chip" type="button" aria-pressed="false">sad</button>
-        <button class="chip" type="button" aria-pressed="false">angry</button>
-        <button class="chip" type="button" aria-pressed="false">anxious</button>
-        <button class="chip" type="button" aria-pressed="false">hurt</button>
-      </div>
-
-      <div class="field" style="margin-bottom:12px">
-        <label for="journalInput">What’s on your heart?</label>
-        <textarea id="journalInput" rows="6" placeholder="Share what’s really going on…"></textarea>
-      </div>
-
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <div class="field">
-          <label for="gratitudeInput">One thing I’m grateful for</label>
-          <input id="gratitudeInput" type="text" placeholder="…even something small" />
+        <!-- Mood chips -->
+        <div class="row" style="gap:8px; margin:6px 0 12px">
+          <button class="chip" type="button" aria-pressed="false">joy</button>
+          <button class="chip" type="button" aria-pressed="false">grateful</button>
+          <button class="chip" type="button" aria-pressed="false">hopeful</button>
+          <button class="chip" type="button" aria-pressed="false">confused</button>
+          <button class="chip" type="button" aria-pressed="false">sad</button>
+          <button class="chip" type="button" aria-pressed="false">angry</button>
+          <button class="chip" type="button" aria-pressed="false">anxious</button>
+          <button class="chip" type="button" aria-pressed="false">hurt</button>
         </div>
-        <div class="field">
-          <label for="smallStepInput">One small step for tomorrow</label>
-          <input id="smallStepInput" type="text" placeholder="a tiny, doable action" />
-        </div>
-      </div>
 
-      <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
-        <button id="saveBtn" class="primary">Save entry &amp; get guidance</button>
-        <span class="muted">Your entries are saved privately in your browser.</span>
+        <!-- Journal text -->
+        <div class="field">
+          <label for="journalInput">What’s on your heart?</label>
+          <textarea id="journalInput" placeholder="Share what’s really going on… this is between you and God (and stays on this device)."></textarea>
+        </div>
+
+        <!-- Gratitude + Small step -->
+        <div class="row" style="margin-top:10px">
+          <div class="field" style="flex:1">
+            <label for="gratitudeInput">One thing I’m grateful for</label>
+            <input id="gratitudeInput" type="text" placeholder="Even something small" />
+          </div>
+          <div class="field" style="flex:1">
+            <label for="smallStepInput">One small step for tomorrow</label>
+            <input id="smallStepInput" type="text" placeholder="A tiny, doable action" />
+          </div>
+        </div>
+
+        <!-- Save -->
+        <div class="row" style="margin-top:14px; align-items:center">
+          <button id="saveBtn" class="btn-primary">Save entry &amp; get guidance</button>
+          <span class="muted sm">We’ll suggest Scripture and a gentle next step.</span>
+        </div>
+      </section>
+
+      <!-- Right: Guidance panel -->
+      <aside class="section guidance" id="guidanceBox" aria-live="polite">
+        <h2 style="margin-top:0">Gentle Guidance</h2>
+        <p class="muted">Save an entry to see tailored coaching and Scripture here.</p>
+      </aside>
+    </div>
+
+    <!-- History -->
+    <section class="section" style="margin-top:22px">
+      <h2 style="margin-top:0">Recent Entries</h2>
+      <div id="historyList" class="list">
+        <div class="muted">No entries yet.</div>
       </div>
     </section>
 
-    <!-- Right: Guidance + History -->
-    <section class="grid" style="align-content:start">
-      <div id="guidanceBox" class="section">
-        <h2 style="margin-top:0">Gentle Guidance</h2>
-        <div class="muted">Save an entry to see tailored coaching and Scripture here.</div>
+    <!-- Footer promo -->
+    <section class="footer" style="margin-top:24px">
+      <div class="brandline">
+        <span class="dot" aria-hidden="true"></span>
+        <span>It’s a Beautiful Mess Podcast</span>
       </div>
-
-      <div class="section">
-        <h2 style="margin-top:0">Recent Entries</h2>
-        <div id="historyList" class="muted">No entries yet.</div>
-      </div>
+      <a class="btn-ghost" target="_blank" rel="noopener"
+         href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww">Listen on Spotify</a>
     </section>
   </main>
 
+  <!-- Tiny toast -->
   <div id="toast" role="status" aria-live="polite"></div>
 
   <!-- App -->
