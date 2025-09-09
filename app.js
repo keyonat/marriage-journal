@@ -1,262 +1,176 @@
-// Marriage Journal: multiple entries per day + improved on-device "AI" reflection
-(function () {
-  const $ = (id) => document.getElementById(id);
+/* Marriage Journal · Bible-Anchored Coaching (client-only MVP)
+   - Multiple entries per day (localStorage)
+   - Scripture/Coaching/Action generated from local keyword map
+*/
 
-  const form = $('entryForm');
-  const date = $('date');
-  const gratitude = $('gratitude');
-  const win = $('win');
-  const act = $('act');
-  const entriesList = $('entriesList');
-  const emptyState = $('emptyState');
+const STORAGE_KEY = 'mj_entries_v1';
 
-  // Track which entry is being edited (by ID); null = creating new
-  let editingId = null;
+const MOODS = [
+  'joy','grateful','hopeful','sad','angry','anxious','tired','hurt','confused'
+];
 
-  // Default date = today
-  date.value = new Date().toISOString().slice(0, 10);
+function $(sel){ return document.querySelector(sel); }
+function formatDateTime(iso){
+  const d = new Date(iso);
+  return d.toLocaleString();
+}
 
-  // ---------- Storage ----------
-  function load() {
-    const raw = localStorage.getItem('marriageJournalEntries');
-    return raw ? JSON.parse(raw) : [];
-  }
-  function save(entries) {
-    localStorage.setItem('marriageJournalEntries', JSON.stringify(entries));
-  }
-
-  // ---------- Render ----------
-  function render() {
-    const entries = load().slice().sort((a, b) => {
-      const aKey = a.createdAt || `${a.date}T00:00:00.000Z`;
-      const bKey = b.createdAt || `${b.date}T00:00:00.000Z`;
-      return bKey.localeCompare(aKey);
+// ----- Mood chips -----
+function renderMoodChips(){
+  const box = $('#moodChips');
+  box.innerHTML = '';
+  MOODS.forEach(m => {
+    const span = document.createElement('span');
+    span.className = 'chip';
+    span.textContent = m;
+    span.dataset.value = m;
+    span.addEventListener('click', ()=> {
+      box.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      span.classList.add('active');
     });
+    box.appendChild(span);
+  });
+}
+function getSelectedMood(){
+  const active = $('#moodChips .chip.active');
+  return active ? active.dataset.value : undefined;
+}
 
-    entriesList.innerHTML = '';
-    emptyState.style.display = entries.length ? 'none' : 'block';
-
-    entries.forEach((e) => {
-      const li = document.createElement('li');
-      li.className = 'entry';
-
-      // Header
-      const header = document.createElement('header');
-      const title = document.createElement('h3');
-      const when = formatDateTime(e.date, e.createdAt);
-      title.textContent = `${when} ${e.mood || ''}`.trim();
-
-      // Tone chip
-      const tone = analyzeTone([e.gratitude, e.win, e.act].filter(Boolean).join(' '), e.mood);
-      const chip = document.createElement('span');
-      chip.className = `chip ${tone}`;
-      chip.textContent = tone.charAt(0).toUpperCase() + tone.slice(1);
-
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.textContent = [e.gratitude && 'Gratitude', e.win && 'Win', e.act && 'Act']
-        .filter(Boolean).join(' · ');
-
-      // attach header parts
-      header.append(title, chip, meta);
-
-      // Body
-      const body = document.createElement('div');
-      body.className = 'text';
-      body.innerHTML =
-        (e.gratitude ? `🙏 <strong>Gratitude:</strong> ${escapeHTML(e.gratitude)}\n` : '') +
-        (e.win ? `🏆 <strong>Win:</strong> ${escapeHTML(e.win)}\n` : '') +
-        (e.act ? `💡 <strong>Act:</strong> ${escapeHTML(e.act)}` : '');
-
-      // Reflection box
-      const reflectionBox = document.createElement('div');
-      reflectionBox.className = 'text muted';
-      reflectionBox.style.marginTop = '6px';
-
-      // Actions
-      const actions = document.createElement('div');
-      actions.className = 'actions';
-      const reflectBtn = button('Reflect with AI (local)', () => {
-        const textBlob = [e.gratitude, e.win, e.act].filter(Boolean).join(' ');
-        const reflection = generateReflection(textBlob, e.mood);
-        reflectionBox.textContent = reflection;
-      });
-      const editBtn = button('Edit', () => editEntry(e.id));
-      const delBtn = button('Delete', () => deleteEntry(e.id));
-      actions.append(reflectBtn, editBtn, delBtn);
-
-      li.append(header, body, actions, reflectionBox);
-      entriesList.appendChild(li);
-    });
+// ----- Storage -----
+function loadEntries(){
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  } catch {
+    return [];
   }
+}
+function saveEntries(arr){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+function addEntry(entry){
+  const all = loadEntries();
+  all.unshift(entry); // newest on top
+  saveEntries(all);
+}
 
-  // ---------- Utilities ----------
-  function button(label, onClick) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'secondary';
-    b.textContent = label;
-    b.addEventListener('click', onClick);
-    return b;
-  }
+// ----- Scripture guidance (local heuristic) -----
+async function loadScriptureMap(){
+  const res = await fetch('data/scripture_map.json');
+  if (!res.ok) throw new Error('Could not load scripture_map.json');
+  return res.json();
+}
+function pickOne(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-  function escapeHTML(str) {
-    return (str || '').replace(/[&<>"']/g, (ch) =>
-      ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[ch]));
-  }
+function extractKeywords(text){
+  const t = (text || '').toLowerCase();
+  const signals = [
+    'anger','unforgiveness','distance','disconnected','drift',
+    'fear','anxious','worry','hopeless','giving up','divorce',
+    'communication','listen','listening','love','kindness','compassion',
+    'trust','betrayal','hurt','gratitude','thankful'
+  ];
+  return signals.filter(s => t.includes(s));
+}
 
-  function currentMood() {
-    const selected = document.querySelector('input[name="mood"]:checked');
-    return selected ? selected.value : '';
-  }
+function tinyActionFor(theme){
+  const actions = {
+    anger: "Pause 90 seconds before responding. Reflect, then mirror what you heard.",
+    unforgiveness: "Pray together; offer one specific apology or request forgiveness.",
+    communication: "Schedule a 10-minute listening block tonight (one speaks, one reflects).",
+    fear: "Pray Philippians 4:6-7 aloud together this evening.",
+    love: "Do one unexpected kindness for your spouse today.",
+    trust: "Share one need and one appreciation tonight.",
+    gratitude: "Each share 3 things you’re thankful for about each other."
+  };
+  return actions[theme] || "Pray together and choose one kind action you can do today.";
+}
 
-  function formatDateTime(dateStr, createdAt) {
-    const d = dateStr || new Date().toISOString().slice(0, 10);
-    if (!createdAt) return d;
-    try {
-      const t = new Date(createdAt);
-      const hh = String(t.getHours()).padStart(2, '0');
-      const mm = String(t.getMinutes()).padStart(2, '0');
-      return `${d} • ${hh}:${mm}`;
-    } catch {
-      return d;
+async function getBiblicalCounsel(text){
+  const map = await loadScriptureMap();
+  const found = extractKeywords(text);
+  let verses = [];
+
+  // try exact keys first, then regex bundle keys (those containing |)
+  for (const key of Object.keys(map)) {
+    const isBundle = key.includes('|');
+    if (!isBundle && found.includes(key)) { verses = map[key]; break; }
+    if (isBundle) {
+      const re = new RegExp(key);
+      if (re.test(text.toLowerCase())) { verses = map[key]; break; }
     }
   }
+  if (verses.length === 0) { verses = map['love|kindness|compassion']; }
 
-  function cryptoRandom() {
-    try {
-      return [...crypto.getRandomValues(new Uint8Array(8))]
-        .map((b) => b.toString(16).padStart(2, '0')).join('');
-    } catch { return String(Math.random()).slice(2); }
+  const verse = pickOne(verses);
+  const theme = found[0] || 'love';
+  const coaching = `Consider this through Scripture. Reflect on ${verse.book} ${verse.chapter}:${verse.verses}: “${verse.text}”. Ask: “What would love require here?”`;
+  const action = tinyActionFor(theme);
+  return { verse, coaching, action };
+}
+
+// ----- UI render -----
+function renderEntries(){
+  const list = $('#entriesList');
+  const entries = loadEntries();
+  list.innerHTML = '';
+  if (entries.length === 0){
+    list.innerHTML = `<li class="muted tiny">No entries yet.</li>`;
+    return;
   }
+  entries.forEach(e => {
+    const li = document.createElement('li');
+    li.className = 'entry';
+    li.innerHTML = `
+      <div class="tiny muted">${formatDateTime(e.id)}${e.mood ? ' · '+e.mood : ''}</div>
+      <div>${escapeHtml(e.text)}</div>
+      ${e.verse ? `<div class="tiny verse">${e.verse.book} ${e.verse.chapter}:${e.verse.verses} — ${e.verse.text}</div>` : ''}
+    `;
+    list.appendChild(li);
+  });
+}
 
-  // ---------- Form submit (create OR update) ----------
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+function showGuidance(g){
+  $('#guidance').style.display = 'block';
+  $('#scriptureBox').textContent =
+    `${g.verse.book} ${g.verse.chapter}:${g.verse.verses} — ${g.verse.text}`;
+  $('#coachingBox').textContent = g.coaching;
+  $('#actionBox').textContent = g.action;
+}
 
-    const entryBase = {
-      date: date.value,
-      mood: currentMood(),
-      gratitude: gratitude.value.trim(),
-      win: win.value.trim(),
-      act: act.value.trim(),
-    };
+function escapeHtml(s=''){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
 
-    const entries = load();
+// ----- Events -----
+async function onSave(){
+  const text = $('#entryText').value.trim();
+  if (!text){ alert('Please write something first.'); return; }
+  const mood = getSelectedMood();
+  const id = new Date().toISOString();
 
-    if (editingId) {
-      const i = entries.findIndex((x) => x.id === editingId);
-      if (i >= 0) {
-        entries[i] = {
-          ...entries[i],
-          ...entryBase,
-          id: editingId,
-          createdAt: entries[i].createdAt || new Date().toISOString(),
-        };
-      }
-      editingId = null;
-    } else {
-      entries.push({
-        ...entryBase,
-        id: cryptoRandom(),
-        createdAt: new Date().toISOString(),
-      });
-    }
+  // get guidance
+  const guidance = await getBiblicalCounsel(text);
 
-    save(entries);
-    form.reset();
-    date.value = new Date().toISOString().slice(0, 10);
-    render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // save entry
+  addEntry({
+    id, text, mood,
+    verse: guidance.verse,
+    note: guidance.coaching
   });
 
-  // ---------- Edit / Delete by ID ----------
-  function editEntry(id) {
-    const e = load().find((x) => x.id === id);
-    if (!e) return;
-    editingId = id;
-    date.value = e.date;
-    gratitude.value = e.gratitude || '';
-    win.value = e.win || '';
-    act.value = e.act || '';
-    document.querySelectorAll('input[name="mood"]').forEach((i) => (i.checked = i.value === e.mood));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  // update UI
+  showGuidance(guidance);
+  renderEntries();
+  $('#entryText').value = '';
+  $('#moodChips .chip.active')?.classList.remove('active');
+}
 
-  function deleteEntry(id) {
-    const entries = load().filter((x) => x.id !== id);
-    save(entries);
-    render();
-  }
+function onClear(){ $('#entryText').value = ''; }
 
-  // ---------- On-device “AI” (improved sentiment + reflection) ----------
-  const STRONG_NEGATIVE = [
-    'divorce','separate','break up','break-up','breakup','hate you',"can't stand",
-    'cheated','infidelity','affair','abuse','toxic','done with this','leave you','leaving'
-  ];
-
-  function generateReflection(text, mood) {
-    const tone = analyzeTone(text, mood);
-    const moodNote = mood ? ` Your recorded mood was ${mood}.` : '';
-
-    if (tone === 'positive') {
-      return `It sounds like there were some bright spots today.${moodNote} Keep reinforcing what went well—repeat one small win tomorrow.`;
-    }
-    if (tone === 'challenging') {
-      return `This sounds like a hard moment.${moodNote} Consider a tiny repair: pause and breathe, share one specific appreciation, or plan a short check-in. If big topics are on the table, schedule a calmer time to discuss with ground rules (one person speaks at a time, reflect back what you heard).`;
-    }
-    return `Overall, this reads as mixed.${moodNote} Name one thing that went okay today, and choose one tiny action for tomorrow to nudge things a bit better.`;
-  }
-
-  function analyzeTone(rawText, mood) {
-    const text = (rawText || '').toLowerCase();
-
-    // 1) Strong phrase override
-    for (const p of STRONG_NEGATIVE) {
-      if (text.includes(p)) return 'challenging';
-    }
-    if (text.includes('no win') || text.includes('nothing good') || text.includes('not grateful')) {
-      return 'challenging';
-    }
-
-    // 2) Lexicon score
-    const score = sentimentScore(text);
-
-    // 3) Mood weight
-    let moodAdj = 0;
-    if (mood && (mood.includes('😞') || /sad|upset|angry|bad/i.test(mood))) moodAdj -= 3;
-    if (mood && (mood.includes('😊') || /happy|good|calm|proud/i.test(mood))) moodAdj += 2;
-
-    const total = score + moodAdj;
-
-    // 4) Thresholds
-    if (total <= -2) return 'challenging';
-    if (total >= 3)  return 'positive';
-    return 'balanced';
-  }
-
-  function sentimentScore(text) {
-    const words = text.match(/[a-z']+/g) || [];
-    let score = 0;
-    for (const w of words) {
-      if (AFINN[w] !== undefined) score += AFINN[w];
-    }
-    return score;
-  }
-
-  // Expanded, lightweight lexicon
-  const AFINN = {
-    // positive
-    love:3, loving:3, happy:3, joyful:3, grateful:3, appreciate:2, appreciated:2, teamwork:2,
-    kind:2, patience:2, calm:2, proud:2, win:2, good:2, support:2, helped:2, listened:2,
-    forgive:2, progress:2, improved:2, celebrate:2, gentle:2, respect:2, peace:2, connect:2,
-    // negative (slightly stronger)
-    argue:-3, argument:-3, fight:-3, fighting:-3, angry:-3, mad:-2, sad:-3, hurt:-3, tired:-2,
-    stressed:-3, stress:-3, ignore:-3, ignored:-3, upset:-3, disappointed:-3, bad:-3,
-    annoyed:-2, distant:-2, cold:-2, frustrated:-3, resentment:-3, resent:-3, blame:-2,
-    jealous:-2, insecure:-2, lonely:-2
-  };
-
-  // Initial render
-  render();
-})();
+// ----- Init -----
+document.addEventListener('DOMContentLoaded', () => {
+  renderMoodChips();
+  renderEntries();
+  $('#saveBtn').addEventListener('click', onSave);
+  $('#clearBtn').addEventListener('click', onClear);
+});
