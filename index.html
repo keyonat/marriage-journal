@@ -1,88 +1,124 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Marriage Journal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marriage Journal · It's a Beautiful Mess</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
-  <header class="container">
-    <h1>Marriage Journal</h1>
-    <p class="tagline">Daily reflections for a stronger “us”.</p>
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-name">It’s a Beautiful Mess</span>
+        <span class="brand-sub">Marriage Journal</span>
+      </div>
+
+      <nav class="top-links">
+        <a class="link" href="#journal">Journal</a>
+        <a class="link" href="#history">History</a>
+        <a class="link" href="#guidance">Guidance</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Today’s Entry</h2>
-      <form id="entryForm">
-        <label class="row">
-          <span>Date</span>
-          <input type="date" id="date" required />
-        </label>
-
-        <fieldset class="row">
-          <legend>Mood</legend>
-          <div class="moods">
-            <label><input type="radio" name="mood" value="😊" required /> 😊</label>
-            <label><input type="radio" name="mood" value="😐" /> 😐</label>
-            <label><input type="radio" name="mood" value="😞" /> 😞</label>
-          </div>
-        </fieldset>
-
-        <label class="row">
-          <span>Gratitude</span>
-          <textarea id="gratitude" rows="3" placeholder="One thing I appreciated today…"></textarea>
-        </label>
-
-        <label class="row">
-          <span>Our Win Today</span>
-          <textarea id="win" rows="3" placeholder="Something we did well together…"></textarea>
-        </label>
-
-        <label class="row">
-          <span>One Act for Tomorrow</span>
-          <textarea id="act" rows="2" placeholder="A tiny thing I can do…"></textarea>
-        </label>
-
-        <div class="actions">
-          <button type="submit">Save Entry</button>
-        </div>
-      </form>
+  <main class="container page">
+    <!-- Intro / hero -->
+    <section class="card hero">
+      <h1 class="hero-title">Bring your heart. We’ll bring Scripture and gentle coaching.</h1>
+      <p class="muted">Capture moments each day. Get biblically-grounded encouragement and a tiny next step you can actually take.</p>
     </section>
 
-    <section class="card">
-      <h2>Past Entries</h2>
-      <div id="emptyState" class="muted">No entries yet.</div>
-      <ul id="entriesList" class="list"></ul>
+    <!-- Journal form -->
+    <section id="journal" class="grid-2">
+      <div class="card">
+        <h2 class="card-title">Today’s Entry</h2>
+
+        <label class="label" for="entryText">What’s on your heart?</label>
+        <textarea id="entryText" class="input" rows="6" placeholder="Be honest and specific. (This stays on your device.)"></textarea>
+
+        <div class="field">
+          <div class="label-row">
+            <label class="label">How do you feel?</label>
+            <span class="hint">Tap one</span>
+          </div>
+          <div id="moodChips" class="chips" role="group" aria-label="Mood">
+            <!-- chips are added by app.js OR you can seed some common ones -->
+            <button type="button" class="chip" data-value="grateful">Grateful</button>
+            <button type="button" class="chip" data-value="hopeful">Hopeful</button>
+            <button type="button" class="chip" data-value="okay">Okay</button>
+            <button type="button" class="chip" data-value="sad">Sad</button>
+            <button type="button" class="chip" data-value="frustrated">Frustrated</button>
+            <button type="button" class="chip" data-value="angry">Angry</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="gratitude">One thing I’m grateful for</label>
+          <input id="gratitude" class="input" type="text" placeholder="E.g., We prayed together tonight" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="action">One small step for tomorrow</label>
+          <input id="action" class="input" type="text" placeholder="E.g., Ask how I can serve my spouse" />
+        </div>
+
+        <button id="submitBtn" class="btn btn-primary">Save entry &amp; get guidance</button>
+
+        <p id="saveNote" class="save-note" aria-live="polite"></p>
+      </div>
+
+      <!-- Guidance panel -->
+      <aside id="guidance" class="card accent">
+        <h2 class="card-title">Scripture &amp; Coaching</h2>
+        <div class="verse-block">
+          <div class="verse-label">Verse</div>
+          <blockquote id="verseText" class="verse">Your verse will appear here after you save an entry.</blockquote>
+        </div>
+
+        <div class="coach-block">
+          <div class="coach-label">Gentle guidance</div>
+          <p id="coachText" class="coach">Thoughtful reflection will appear here.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- History -->
+    <section id="history" class="card">
+      <h2 class="card-title">Recent Entries</h2>
+      <ul id="entriesList" class="entries"></ul>
     </section>
   </main>
 
-  <footer class="footer container muted">
-    <p>
-      Entries are saved locally in your browser (private to you).
-    </p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <div class="brand tiny">
+          <span class="brand-mark" aria-hidden="true">✶</span>
+          <span class="brand-name">It’s a Beautiful Mess</span>
+        </div>
+        <p class="muted sm">
+          Stay grounded: pray together · read Scripture daily · weekly ESPM check-ins · communicate regularly · keep Christ at the center.
+        </p>
+      </div>
 
-    <p>
-      💡 Need encouragement? Check out 
-      <a href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww" target="_blank" rel="noopener">
-        <strong>It’s a Beautiful Mess Podcast</strong>
-      </a> — for guidance and coaching on building strong marriages.
-    </p>
-
-    <div class="footer-tips">
-      <p class="tips-title">✨ Stay grounded in your marriage:</p>
-      <ul>
-        <li>Pray together daily</li>
-        <li>Read your Bible daily</li>
-        <li>Do weekly ESPM check-ins</li>
-        <li>Communicate regularly</li>
-        <li>Keep God at the center of everything you do</li>
-        <li>Remember marriage reflects Christ and the Church</li>
-      </ul>
+      <div class="footer-right">
+        <a id="podcastLink" class="btn btn-ghost" target="_blank" rel="noopener"
+           href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww">
+          Listen on Spotify
+        </a>
+      </div>
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
