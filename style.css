@@ -1,18 +1,12 @@
 /* =========================
    Brand theme
    ========================= */
-:root{
-  --black:#0B0B0C;
-  --dark:#151516;
-  --gold:#D4AF37;            /* warm gold */
-  --gold-ink:#C9A227;
-  --cream:#FAF6F0;           /* page background */
-  --paper:#FFFFFF;
-  --ink:#222;
-  --muted:#6B6B6E;
-  --line:#EDE7DC;
-  --shadow: 0 10px 30px rgba(11,11,12,0.12);
-  --radius:18px;
+:root {
+  --brand: #D4AF37;       /* gold */
+  --brand-dark: #000000;  /* black */
+  --bg: #F9F4EB;          /* cream background */
+  --text: #1A1A1A;        /* near-black for readability */
+  --accent: #ffffff;      /* white, used for contrast */
 }
 
 /* Reset-ish */
