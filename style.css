@@ -3,41 +3,27 @@
    Palette: cream / white / black / gold
    ========================================= */
 
-/* Brand tokens */
 :root{
-  /* Core palette */
-  --cream: #F9F4EB;          /* page background */
-  --cream-2:#F3EAD9;         /* soft surface tint */
-  --white: #FFFFFF;
-  --black: #0B0B0C;          /* deep ink */
-  --text:  #222222;          /* body text */
-  --muted: #6A6A6D;
-
-  /* Gold system */
-  --gold:       #D4AF37;
-  --gold-700:   #B9972F;
-  --gold-100:   #FBF3D6;
-
-  /* Lines/shadows/radius */
-  --line:  rgba(11,11,12,.08);
-  --shadow:0 14px 30px rgba(11,11,12,.10), 0 3px 8px rgba(11,11,12,.06);
-  --radius-s: 10px;
-  --radius-m: 14px;
-  --radius-l: 18px;
-
-  /* Focus ring */
-  --ring: 0 0 0 3px rgba(212,175,55,.25);
-
-  /* Type scale */
-  --h1: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem);
-  --h2: clamp(1.25rem, 1.05rem + .8vw, 1.6rem);
-  --h3: 1.05rem;
-  --body: 1rem;
-  --small: .92rem;
-
-  /* Layout */
-  --maxw: 1100px;
+  --cream: #F9F4EB; /* calm cream */
+  /* leave the rest of your variables as-is */
 }
+
+/* Base page background */
+body{
+  background: var(--cream);
+}
+
+/* Decorative brand tint — make sure NO pink/purple here */
+body::before{
+  content:"";
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(1000px 520px at 12% -8%, rgba(212,175,55,.10), transparent 65%),
+    radial-gradient(900px 500px at 100% 0%, rgba(0,0,0,.05), transparent 60%),
+    radial-gradient(700px 420px at 50% 110%, rgba(212,175,55,.06), transparent 60%);
+  pointer-events:none;
+}
+
 
 /* Base */
 *{ box-sizing: border-box; }
