@@ -5,15 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>It’s a Beautiful Mess · Marriage Journal</title>
   <meta name="description" content="Gentle, Scripture-guided reflections for couples. Save entries privately and receive coaching rooted in God’s Word." />
-  <link rel="stylesheet" href="style.css?v=layout-001">
+  <meta name="theme-color" content="#FFF8EF">
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content="It’s a Beautiful Mess · Marriage Journal" />
+  <meta property="og:description" content="Gentle, Scripture-guided reflections for couples. Save entries privately and receive coaching rooted in God’s Word." />
+  <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    :root{
+      --bg: #fff;
+      --bg-soft: #FFF8EF;
+      --ink: #222;
+      --ink-muted:#5b5b5b;
+      --brand:#6f63ff;
+      --brand-ink:#332a99;
+      --card:#ffffff;
+      --border: rgba(0,0,0,.08);
+      --chip-bg:#f2f2f2;
+      --chip-ink:#333;
+      --chip-on:#2f2f2f;
+      --chip-on-bg:#e9e7ff;
+      --focus:#0a7cff;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0c0c0e; --bg-soft:#111115; --ink:#f6f6f8; --ink-muted:#b6b6bc;
+        --card:#141418; --border:rgba(255,255,255,.08);
+        --chip-bg:#1d1d22; --chip-ink:#dedee2; --chip-on:#fff; --chip-on-bg:#232335;
+        --brand:#9fa4ff; --brand-ink:#c7c8ff;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji"; background:var(--bg); color:var(--ink)}
+    .page-shell{max-width:1000px; margin:0 auto; padding:16px}
+    header .header{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; background:linear-gradient(180deg,var(--card), var(--bg-soft)); border:1px solid var(--border); border-radius:14px}
+    .brand{display:flex; gap:10px; align-items:center}
+    .brand .dot{width:12px; height:12px; border-radius:999px; background:radial-gradient(circle at 30% 30%, #ffd86b, #ff9b6b); box-shadow:0 0 0 3px rgba(255,219,143,.35)}
+    .brand small{display:block; color:var(--ink-muted)}
+    nav.tabs{display:flex; gap:6px}
+    .tab{appearance:none; border:1px solid var(--border); background:var(--card); color:var(--ink); padding:8px 10px; border-radius:10px; cursor:pointer}
+    .tab[aria-selected="true"]{outline:2px solid var(--brand); outline-offset:0}
+    .title{font-size:clamp(20px,3.6vw,28px); margin:12px 0 4px}
+    .muted{color:var(--ink-muted)}
+    .sm{font-size:.9rem}
+
+    main .layout{display:grid; grid-template-columns: 1.2fr .8fr; gap:16px}
+    @media (max-width: 860px){ main .layout{grid-template-columns:1fr} }
+
+    .section{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px}
+    .guidance{position:sticky; top:10px; align-self:start}
+    h2{font-size:1.1rem; letter-spacing:.2px}
+
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .main-grid{display:block}
+
+    label{display:block; font-weight:600; margin-bottom:6px}
+    input[type="text"], textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--ink)}
+    textarea{min-height:140px; resize:vertical}
+
+    .chip{appearance:none; border:1px solid var(--border); background:var(--chip-bg); color:var(--chip-ink); padding:6px 10px; border-radius:999px; cursor:pointer}
+    .chip[aria-pressed="true"]{background:var(--chip-on-bg); color:var(--chip-on); border-color:transparent}
+    .chip:focus-visible, .btn-primary:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
+
+    .btn-primary{appearance:none; border:0; background:linear-gradient(180deg, var(--brand), #4e85ff); color:white; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(47,80,255,.25)}
+    .btn-ghost{appearance:none; border:1px solid var(--border); background:transparent; color:var(--ink); padding:8px 10px; border-radius:10px; cursor:pointer}
+
+    .list{display:grid; gap:10px}
+    .entry-card{border:1px solid var(--border); border-radius:12px; padding:12px; background:var(--bg-soft)}
+    .entry-card h3{margin:0 0 6px; font-size:1rem}
+    .pill{display:inline-block; padding:2px 8px; border-radius:999px; background:var(--chip-on-bg); color:var(--chip-on); margin-right:6px; font-size:.8rem}
+
+    .footer-reminders{max-width:1000px; margin:20px auto; padding:10px 16px; text-align:center; color:var(--ink-muted)}
+    .footer-reminders a{color:inherit}
+
+    .sr-only{position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; border:0!important}
+  </style>
 </head>
 <body>
 
   <!-- Header / Brand -->
   <header>
     <div class="page-shell">
-      <div class="header" style="background:linear-gradient(180deg,#FFF, #FFF8EF); border:1px solid rgba(0,0,0,.04); border-radius:14px;">
+      <div class="header" role="banner">
         <div class="brand">
           <span class="dot" aria-hidden="true"></span>
           <div>
@@ -22,12 +96,12 @@
           </div>
         </div>
         <nav class="tabs" aria-label="Sections">
-          <button class="tab" aria-selected="true" onclick="document.getElementById('today').scrollIntoView({behavior:'smooth'});">Journal</button>
-          <button class="tab" aria-selected="false" onclick="document.getElementById('guidanceBox').scrollIntoView({behavior:'smooth'});">Guidance</button>
-          <button class="tab" aria-selected="false" onclick="document.getElementById('historyList').scrollIntoView({behavior:'smooth'});">History</button>
+          <button class="tab" aria-selected="true" data-scroll="#today">Journal</button>
+          <button class="tab" aria-selected="false" data-scroll="#guidanceBox">Guidance</button>
+          <button class="tab" aria-selected="false" data-scroll="#historyList">History</button>
         </nav>
       </div>
-      <h1 class="title" style="margin-top:12px;">Bring your heart. We’ll bring Scripture and a gentle next step.</h1>
+      <h1 class="title">Bring your heart. We’ll bring Scripture and a gentle next step.</h1>
       <p class="muted sm" style="margin-top:-4px;">Entries are saved privately on this device.</p>
     </div>
   </header>
@@ -41,7 +115,7 @@
         <h2 id="entry-title">Today’s Entry</h2>
 
         <!-- Mood chips -->
-        <div class="row" style="gap:8px; margin:6px 0 12px">
+        <div class="row" style="gap:8px; margin:6px 0 12px" id="moodRow" role="group" aria-label="Select moods">
           <button class="chip" type="button" aria-pressed="false">joy</button>
           <button class="chip" type="button" aria-pressed="false">grateful</button>
           <button class="chip" type="button" aria-pressed="false">hopeful</button>
@@ -55,7 +129,8 @@
         <!-- Journal text -->
         <div class="field">
           <label for="journalInput">What’s on your heart?</label>
-          <textarea id="journalInput" placeholder="Share what’s really going on… this is between you and God (and stays on this device)."></textarea>
+          <textarea id="journalInput" placeholder="Share what’s really going on… this is between you and God (and stays on this device)." aria-describedby="privacyNote"></textarea>
+          <small id="privacyNote" class="muted">Private: stored only in your browser.</small>
         </div>
 
         <!-- Gratitude + Small step -->
@@ -72,15 +147,22 @@
 
         <!-- Save -->
         <div class="row" style="margin-top:14px; align-items:center">
-          <button id="saveBtn" class="btn-primary">Save entry &amp; get guidance</button>
-          <span class="muted sm">We’ll suggest Scripture and a gentle next step.</span>
+          <button id="saveBtn" class="btn-primary" type="button">Save entry &amp; get guidance</button>
+          <button id="clearBtn" class="btn-ghost" type="button" title="Clear the form">Clear</button>
+          <span class="muted sm" aria-live="polite" id="saveStatus">We’ll suggest Scripture and a gentle next step.</span>
         </div>
       </section>
 
       <!-- Right: Guidance panel -->
-      <aside class="section guidance" id="guidanceBox" aria-live="polite">
+      <aside class="section guidance" id="guidanceBox" aria-live="polite" aria-label="Gentle Guidance">
         <h2 style="margin-top:0">Gentle Guidance</h2>
-        <p class="muted">Save an entry to see tailored coaching and Scripture here.</p>
+        <p class="muted" id="guidanceEmpty">Save an entry to see tailored coaching and Scripture here.</p>
+        <div id="guidanceContent" hidden>
+          <h3 style="margin-top:0" id="guidanceTitle">Today’s Scripture & Next Step</h3>
+          <blockquote id="scripture" style="margin:0 0 8px"></blockquote>
+          <p id="coaching" style="margin:0 0 8px"></p>
+          <p class="muted sm" id="reflection"></p>
+        </div>
       </aside>
     </div>
 
@@ -91,13 +173,230 @@
         <div class="muted">No entries yet.</div>
       </div>
      </section>
-    </div>
+    </main>
 
   <!-- Footer Reminders -->
-<footer class="footer-reminders">
-  <p>Pray together daily · Do weekly ESPM check-ins · Read your Bible together · Keep Christ at the center</p>
-  <p>💛 It's a Beautiful Mess Podcast – <a href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww" target="_blank">Listen on Spotify</a></p>
-</footer>
+  <footer class="footer-reminders" role="contentinfo">
+    <p>Pray together daily · Do weekly ESPM check-ins · Read your Bible together · Keep Christ at the center</p>
+    <p>💛 It's a Beautiful Mess Podcast – <a href="https://open.spotify.com/show/2QN3fD54KChJcXLzslECID?si=93wwqtx_SjqOZSZi7eRLww" target="_blank" rel="noopener">Listen on Spotify</a></p>
+  </footer>
 
-  </main>
+  <script>
+  // --- Utilities
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+  const storeKey = 'ibm-marriage-journal-v1';
 
+  // Robust ID generator (works even if crypto.randomUUID is unavailable)
+  function uid(){
+    try { return crypto.randomUUID(); }
+    catch { return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
+  }
+
+  function formatDate(ts){
+    const d = new Date(ts);
+    return d.toLocaleString(undefined, { year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+  }
+
+  // --- Mood chips: toggleable & keyboard-friendly
+  const moodRow = $('#moodRow');
+  moodRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.chip');
+    if(!btn) return;
+    const pressed = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', String(!pressed));
+  });
+  // Space/Enter toggle for accessibility
+  $$('.chip', moodRow).forEach(chip=>{
+    chip.addEventListener('keydown', (e)=>{
+      if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); chip.click(); }
+    });
+  });
+
+  // --- Tabs smooth scroll & selected state
+  $$('nav.tabs .tab').forEach((tab)=>{
+    tab.addEventListener('click', ()=>{
+      const target = tab.getAttribute('data-scroll');
+      if(target){ document.querySelector(target).scrollIntoView({behavior:'smooth'}); }
+      $$('nav.tabs .tab').forEach(t=>t.setAttribute('aria-selected','false'));
+      tab.setAttribute('aria-selected','true');
+    })
+  });
+
+  // --- Local storage helpers
+  function loadEntries(){
+    try{ return JSON.parse(localStorage.getItem(storeKey)) || []; }catch{ return []; }
+  }
+  function saveEntries(entries){
+    localStorage.setItem(storeKey, JSON.stringify(entries));
+  }
+
+  // --- Render history
+  function renderHistory(){
+    const list = $('#historyList');
+    const entries = loadEntries().sort((a,b)=> b.ts - a.ts);
+    list.innerHTML = '';
+    if(entries.length === 0){
+      list.innerHTML = '<div class="muted">No entries yet.</div>';
+      return;
+    }
+    for(const e of entries){
+      const card = document.createElement('article');
+      card.className = 'entry-card';
+      card.innerHTML = `
+        <h3>${formatDate(e.ts)}</h3>
+        <div>${(e.moods||[]).map(m=>`<span class="pill">${m}</span>`).join(' ')}</div>
+        ${e.gratitude ? `<p><strong>Grateful:</strong> ${escapeHtml(e.gratitude)}</p>`:''}
+        ${e.step ? `<p><strong>Small step:</strong> ${escapeHtml(e.step)}</p>`:''}
+        ${e.text ? `<details><summary>Show journal</summary><p>${escapeHtml(e.text)}</p></details>`:''}
+        <div class="row" style="margin-top:6px">
+          <button class="btn-ghost" data-act="restore" data-id="${e.id}">Restore</button>
+          <button class="btn-ghost" data-act="delete" data-id="${e.id}">Delete</button>
+        </div>
+      `;
+      list.appendChild(card);
+    }
+  }
+
+  // --- Escape HTML (safety for rendering text)
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[s]));
+  }
+
+  // --- Guidance engine (simple, on-device)
+  const scriptureBank = {
+    joy:[
+      {ref:'Philippians 4:4', text:'Rejoice in the Lord always; again I will say, rejoice.'},
+      {ref:'Psalm 118:24', text:'This is the day that the LORD has made; let us rejoice and be glad in it.'}
+    ],
+    grateful:[
+      {ref:'1 Thessalonians 5:18', text:'Give thanks in all circumstances; for this is the will of God in Christ Jesus for you.'}
+    ],
+    hopeful:[
+      {ref:'Romans 15:13', text:'May the God of hope fill you with all joy and peace in believing...'}
+    ],
+    confused:[
+      {ref:'James 1:5', text:'If any of you lacks wisdom, let him ask God, who gives generously to all without reproach, and it will be given him.'}
+    ],
+    sad:[
+      {ref:'Psalm 34:18', text:'The LORD is near to the brokenhearted and saves the crushed in spirit.'}
+    ],
+    angry:[
+      {ref:'Ephesians 4:26', text:'Be angry and do not sin; do not let the sun go down on your anger.'}
+    ],
+    anxious:[
+      {ref:'Philippians 4:6–7', text:'Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God...'}
+    ],
+    hurt:[
+      {ref:'Colossians 3:13', text:'Bear with each other and forgive one another... Forgive as the Lord forgave you.'}
+    ],
+    default:[
+      {ref:'Proverbs 3:5–6', text:'Trust in the LORD with all your heart, and do not lean on your own understanding.'}
+    ]
+  };
+
+  function pickScripture(moods){
+    const pool = [];
+    moods.forEach(m=>{ if(scriptureBank[m]) pool.push(...scriptureBank[m]); });
+    if(pool.length === 0) pool.push(...scriptureBank.default);
+    return pool[Math.floor(Math.random()*pool.length)];
+  }
+
+  function buildCoaching(moods, step){
+    const m = new Set(moods);
+    if(m.has('angry')) return 'Pause for 10 seconds before responding, then share feelings using “I” statements. Pray together for soft hearts.';
+    if(m.has('anxious')) return 'Try a 2-minute breath prayer together: inhale “Lord Jesus,” exhale “give us Your peace.” Write down one worry and surrender it to God.';
+    if(m.has('hurt')) return 'Schedule a gentle conversation: “When X happened, I felt Y. I value us. Could we try Z?” Close in prayer asking God to help you both listen well.';
+    if(m.has('confused')) return 'Ask one clarifying question without defending yourself. Then read James 1:5 and pray for wisdom together.';
+    if(step) return 'Beautiful next step. Keep it tiny and specific so it’s doable. I’ll cheer you on!';
+    return 'Choose one tiny, loving action for tomorrow (text encouragement, make tea, or pray out loud together).';
+  }
+
+  function buildReflection(){
+    return 'Reflection prompt: How did culture, busyness, or pride tug at your covenant today? Bring it to God and to each other in honesty.';
+  }
+
+  function renderGuidance(moods, step){
+    const s = pickScripture(moods);
+    $('#guidanceEmpty').hidden = true;
+    $('#guidanceContent').hidden = false;
+    $('#scripture').textContent = `“${s.text}” — ${s.ref}`;
+    $('#coaching').textContent = buildCoaching(moods, step);
+    $('#reflection').textContent = buildReflection();
+  }
+
+  // --- Save flow
+  $('#saveBtn').addEventListener('click', ()=>{
+    const moods = $$('.chip[aria-pressed="true"]').map(x=>x.textContent.trim());
+    const text = $('#journalInput').value.trim();
+    const gratitude = $('#gratitudeInput').value.trim();
+    const step = $('#smallStepInput').value.trim();
+
+    if(!text && moods.length===0 && !gratitude && !step){
+      $('#saveStatus').textContent = 'Add a thought, mood, gratitude, or step before saving.';
+      return;
+    }
+
+    const entries = loadEntries();
+    const now = Date.now();
+    entries.push({ id: uid(), ts: now, moods, text, gratitude, step });
+    saveEntries(entries);
+
+    renderHistory();
+    renderGuidance(moods, step);
+
+    $('#saveStatus').textContent = 'Saved! Guidance updated.';
+    setTimeout(()=> $('#saveStatus').textContent = 'We’ll suggest Scripture and a gentle next step.', 3000);
+
+    // keep the text but clear small inputs to encourage daily step
+    $('#gratitudeInput').value = '';
+    $('#smallStepInput').value = '';
+  });
+
+  // Clear form
+  $('#clearBtn').addEventListener('click', ()=>{
+    $$('#moodRow .chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+    $('#journalInput').value = '';
+    $('#gratitudeInput').value = '';
+    $('#smallStepInput').value = '';
+    $('#saveStatus').textContent = 'Cleared.';
+    setTimeout(()=> $('#saveStatus').textContent = 'We’ll suggest Scripture and a gentle next step.', 2000);
+  });
+
+  // History actions (event delegation)
+  $('#historyList').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-act]');
+    if(!btn) return;
+    const id = btn.getAttribute('data-id');
+    const act = btn.getAttribute('data-act');
+    const entries = loadEntries();
+    const idx = entries.findIndex(x=>x.id===id);
+    if(idx<0) return;
+
+    if(act==='delete'){
+      entries.splice(idx,1);
+      saveEntries(entries);
+      renderHistory();
+      return;
+    }
+
+    if(act==='restore'){
+      const eRec = entries[idx];
+      // restore fields
+      $$('#moodRow .chip').forEach(c=>{
+        const on = eRec.moods.includes(c.textContent.trim());
+        c.setAttribute('aria-pressed', String(on));
+      });
+      $('#journalInput').value = eRec.text || '';
+      $('#gratitudeInput').value = eRec.gratitude || '';
+      $('#smallStepInput').value = eRec.step || '';
+      $('#saveStatus').textContent = 'Entry restored into the form.';
+      document.querySelector('#today').scrollIntoView({behavior:'smooth'});
+    }
+  });
+
+  // Initial render
+  renderHistory();
+  </script>
+</body>
+</html>
